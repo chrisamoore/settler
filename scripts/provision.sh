@@ -32,7 +32,7 @@ pip install python-simple-hipchat
 
 # Set My Timezone
 
-ln -sf /usr/share/zoneinfo/UTC /etc/localtime 
+ln -sf /usr/share/zoneinfo/UTC /etc/localtime
 
 # Install PHP Stuffs
 
@@ -40,7 +40,7 @@ apt-get install -y php5-cli php5-dev php-pear \
 php5-mysqlnd php5-pgsql php5-sqlite \
 php5-apcu php5-json php5-curl php5-gd \
 php5-gmp php5-imap php5-mcrypt php5-xdebug \
-php5-memcached php5-redis
+php5-memcached php5-redis php5-mongo
 
 # Make MCrypt Available
 
@@ -119,7 +119,7 @@ groups vagrant
 apt-get install -y nodejs
 npm install -g grunt-cli
 npm install -g gulp
-npm install -g bower
+npm install -g bower aglio dredd api-mock yo
 
 # Install SQLite
 
@@ -127,21 +127,21 @@ apt-get install -y sqlite3 libsqlite3-dev
 
 # Install MySQL
 
-debconf-set-selections <<< "mysql-server mysql-server/root_password password secret"
-debconf-set-selections <<< "mysql-server mysql-server/root_password_again password secret"
+debconf-set-selections <<< "mysql-server mysql-server/root_password password root"
+debconf-set-selections <<< "mysql-server mysql-server/root_password_again password root"
 apt-get install -y mysql-server
 
 # Configure MySQL Remote Access
 
 sed -i '/^bind-address/s/bind-address.*=.*/bind-address = 10.0.2.15/' /etc/mysql/my.cnf
-mysql --user="root" --password="secret" -e "GRANT ALL ON *.* TO root@'10.0.2.2' IDENTIFIED BY 'secret' WITH GRANT OPTION;"
+mysql --user="root" --password="root" -e "GRANT ALL ON *.* TO root@'10.0.2.2' IDENTIFIED BY 'root' WITH GRANT OPTION;"
 service mysql restart
 
-mysql --user="root" --password="secret" -e "CREATE USER 'homestead'@'10.0.2.2' IDENTIFIED BY 'secret';"
-mysql --user="root" --password="secret" -e "GRANT ALL ON *.* TO 'homestead'@'10.0.2.2' IDENTIFIED BY 'secret' WITH GRANT OPTION;"
-mysql --user="root" --password="secret" -e "GRANT ALL ON *.* TO 'homestead'@'%' IDENTIFIED BY 'secret' WITH GRANT OPTION;"
-mysql --user="root" --password="secret" -e "FLUSH PRIVILEGES;"
-mysql --user="root" --password="secret" -e "CREATE DATABASE homestead;"
+mysql --user="root" --password="root" -e "CREATE USER 'root'@'10.0.2.2' IDENTIFIED BY 'root';"
+mysql --user="root" --password="root" -e "GRANT ALL ON *.* TO 'root'@'10.0.2.2' IDENTIFIED BY 'root' WITH GRANT OPTION;"
+mysql --user="root" --password="root" -e "GRANT ALL ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION;"
+mysql --user="root" --password="root" -e "FLUSH PRIVILEGES;"
+mysql --user="root" --password="root" -e "CREATE DATABASE root;"
 service mysql restart
 
 # Install Postgres
@@ -152,8 +152,8 @@ apt-get install -y postgresql postgresql-contrib
 
 sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/g" /etc/postgresql/9.3/main/postgresql.conf
 echo "host    all             all             10.0.2.2/32               md5" | tee -a /etc/postgresql/9.3/main/pg_hba.conf
-sudo -u postgres psql -c "CREATE ROLE homestead LOGIN UNENCRYPTED PASSWORD 'secret' SUPERUSER INHERIT NOCREATEDB NOCREATEROLE NOREPLICATION;"
-sudo -u postgres /usr/bin/createdb --echo --owner=homestead homestead
+sudo -u postgres psql -c "CREATE ROLE root LOGIN UNENCRYPTED PASSWORD 'root' SUPERUSER INHERIT NOCREATEDB NOCREATEROLE NOREPLICATION;"
+sudo -u postgres /usr/bin/createdb --echo --owner=root root
 service postgresql restart
 
 # Install A Few Other Things
@@ -166,5 +166,12 @@ sudo sed -i "s/#START=yes/START=yes/" /etc/default/beanstalkd
 sudo /etc/init.d/beanstalkd start
 
 # Write Bash Aliases
-
 cp /vagrant/aliases /home/vagrant/.bash_aliases
+
+#setup Zsh
+apt-get install -y zsh
+curl -L http://install.ohmyz.sh | sh
+# copy dot files
+
+#set default hosts for nginx
+
