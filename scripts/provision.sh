@@ -40,7 +40,8 @@ apt-get install -y php5-cli php5-dev php-pear \
 php5-mysqlnd php5-pgsql php5-sqlite \
 php5-apcu php5-json php5-curl php5-gd \
 php5-gmp php5-imap php5-mcrypt php5-xdebug \
-php5-memcached php5-redis php5-mongo
+php5-memcached php5-redis php5-mongo \
+multitail screen
 
 # Make MCrypt Available
 
@@ -119,7 +120,7 @@ groups vagrant
 apt-get install -y nodejs
 npm install -g grunt-cli
 npm install -g gulp
-npm install -g bower aglio dredd api-mock yo
+npm install -g bower aglio dredd api-mock yo redis-commander
 
 # Install SQLite
 
@@ -171,7 +172,9 @@ cp /vagrant/aliases /home/vagrant/.bash_aliases
 #setup Zsh
 apt-get install -y zsh
 curl -L http://install.ohmyz.sh | sh
+
 # copy dot files
+cp -ir /vagrant/files/dot/* /home/vagrant/
 
 #set default hosts for nginx
 

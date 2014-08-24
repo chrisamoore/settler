@@ -3,6 +3,13 @@ set -o vi
 # Path to your oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
 
+# The following lines were added by compinstall
+zstyle :compinstall filename '/home/vagrant/.zshrc'
+
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall
+
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
@@ -39,10 +46,6 @@ alias df='df -h'
 # cd
 alias ..='cd ..'
 
-alias api='cd /var/www/twitter-laravel/twitter-api'
-alias ui='cd /var/www/twitter-laravel/twitter-ui'
-alias l4='cd /var/www/twitter-laravel/twitter-api'
-
 alias mongo_limit='DBQuery.shellBatchSize = 3000'
 
 alias ls="/bin/ls $LS_OPTIONS"
@@ -61,18 +64,13 @@ alias home='cd ${HOME}'
 alias up='cd ..'
 alias web='cd /vagrant'
 alias mt='multitail -CS php'
-alias l4='cd /var/www/twitter-laravel'
-alias blue='cd /var/www/twitter-api-blueprint'
-alias ui='cd /var/www/twitter-ui'
 
 alias art='/var/www/twitter-laravel/artisan'
-
-alias test_all='/usr/bin/php /vagrant/twitter-laravel/artisan env:reset -f && /vagrant/twitter-laravel/vendor/bin/phpunit -c /vagrant/twitter-laravel/phpunit.xml && /vagrant/twitter-api-blueprint/bin/run-dredd'
 
 alias bounce='sudo cp /vagrant/puphpet/files/custom/nginx.conf /etc/nginx/conf.d/nginx.conf && sudo nginx -c /etc/nginx/nginx.conf -t && sudo /etc/init.d/nginx restart && sudo /etc/init.d/php5-fpm restart'
 alias super_bounce='/usr/bin/php /var/www/twitter-laravel/artisan beanstalkd:clear && sudo cp /vagrant/puphpet/files/custom/supervisord.conf /etc/supervisor/conf.d/supervisord.conf && sudo supervisord -c /etc/supervisor/conf.d/supervisord.conf'
 alias pool_bounce='sudo cp -ir /vagrant/puphpet/files/custom/www.conf /etc/php5/fpm/pool.d/www.conf'
-alias dot='cp /vagrant/puphpet/files/dot/.zshrc ~/.zshrc && . ~/.zshrc'
+alias dot='cp -ir /vagrant/puphpet/files/dot/* ~/* && . ~/.zshrc'
 
 function mock(){
       if [ -z $1 ]
