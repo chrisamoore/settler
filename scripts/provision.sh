@@ -134,12 +134,12 @@ apt-get install -y mysql-server
 
 # Configure MySQL Remote Access
 
-sed -i '/^bind-address/s/bind-address.*=.*/bind-address = 10.0.2.15/' /etc/mysql/my.cnf
-mysql --user="root" --password="root" -e "GRANT ALL ON *.* TO root@'10.0.2.2' IDENTIFIED BY 'root' WITH GRANT OPTION;"
+sed -i '/^bind-address/s/bind-address.*=.*/bind-address = 127.0.0.1/' /etc/mysql/my.cnf
+mysql --user="root" --password="root" -e "GRANT ALL ON *.* TO root@'127.0.0.1' IDENTIFIED BY 'root' WITH GRANT OPTION;"
 service mysql restart
 
-mysql --user="root" --password="root" -e "CREATE USER 'root'@'10.0.2.2' IDENTIFIED BY 'root';"
-mysql --user="root" --password="root" -e "GRANT ALL ON *.* TO 'root'@'10.0.2.2' IDENTIFIED BY 'root' WITH GRANT OPTION;"
+mysql --user="root" --password="root" -e "CREATE USER 'root'@'127.0.0.1' IDENTIFIED BY 'root';"
+mysql --user="root" --password="root" -e "GRANT ALL ON *.* TO 'root'@'127.0.0.1' IDENTIFIED BY 'root' WITH GRANT OPTION;"
 mysql --user="root" --password="root" -e "GRANT ALL ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION;"
 mysql --user="root" --password="root" -e "FLUSH PRIVILEGES;"
 mysql --user="root" --password="root" -e "CREATE DATABASE root;"
@@ -152,7 +152,7 @@ apt-get install -y postgresql postgresql-contrib
 # Configure Postgres Remote Access
 
 sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/g" /etc/postgresql/9.3/main/postgresql.conf
-echo "host    all             all             10.0.2.2/32               md5" | tee -a /etc/postgresql/9.3/main/pg_hba.conf
+echo "host    all             all             127.0.0.1/32               md5" | tee -a /etc/postgresql/9.3/main/pg_hba.conf
 sudo -u postgres psql -c "CREATE ROLE root LOGIN UNENCRYPTED PASSWORD 'root' SUPERUSER INHERIT NOCREATEDB NOCREATEROLE NOREPLICATION;"
 sudo -u postgres /usr/bin/createdb --echo --owner=root root
 service postgresql restart
@@ -168,6 +168,7 @@ sudo /etc/init.d/beanstalkd start
 
 # Write Bash Aliases
 cp /vagrant/aliases /home/vagrant/.bash_aliases
+cp -ir /vagrant/scripts/dot/.vim /home/vagrant/ && cp -ir /vagrant/scripts/dot/.vimrc /home/vagrant/ && cp -ir /vagrant/scripts/dot/.viminfo /home/vagrant/ && cp -ir /vagrant/scripts/dot/.multitailrc /home/vagrant/
 
 #setup Zsh
 apt-get install -y zsh
